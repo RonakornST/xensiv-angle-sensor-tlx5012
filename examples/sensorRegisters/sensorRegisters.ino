@@ -17,6 +17,7 @@
  *
  */
 
+ 
  #if defined(__AVR_ATmega328P__)
  // Needs more memory than the Arduino UNO has
  void setup()
@@ -41,7 +42,12 @@ using namespace tle5012;
 Tle5012Ino Tle5012Sensor = Tle5012Ino();
 errorTypes checkError = NO_ERROR;
 
-
+/**
+ * @brief Function prints the binary code of each documented register
+ * 
+ * @param regValue uint16_t value of the register
+ * @param regType String name of the register
+ */
 void printval(uint16_t regValue, String regType)
 {
   Serial.print("0x");
@@ -86,6 +92,10 @@ void show_bin()
   Serial.flush();
 }
 
+/**
+ * @brief Function shows the status registers
+ * 
+ */
 void show_STAT()
 {
   boolean valBool;
@@ -163,6 +173,10 @@ void show_STAT()
   Serial.println(valBool ? sc_SRST0 : sc_SRST1);
 }
 
+/**
+ * @brief Function shows the activation status registers
+ * 
+ */
 void show_ACSTAT()
 {
   boolean valBool;
@@ -221,6 +235,10 @@ void show_ACSTAT()
   Serial.println(valBool ? sc_ASRST0 : sc_ASRST1);
 }
 
+/**
+ * @brief Function shows the angle registers
+ * 
+ */
 void show_MAINA()
 {
   boolean valBool;
@@ -280,7 +298,10 @@ void show_MAINA()
   Serial.println(sc_FSYNC);
 }
 
-
+/**
+ * @brief Function shows the interface mode registers
+ * 
+ */
 void show_MOD1()
 {
   uint16_t value = 0;
@@ -324,6 +345,10 @@ void show_MOD1()
                     : sc_IIF3)));
 }
 
+/**
+ * @brief Function shows the filter registers
+ * 
+ */
 void show_SIL()
 {
   uint16_t value = 0;
@@ -391,6 +416,10 @@ void show_SIL()
                               : sc_adctv6))))));
 }
 
+/**
+ * @brief Function shows the mode registers
+ * 
+ */
 void show_MOD2()
 {
   uint16_t value = 0;
@@ -432,6 +461,10 @@ void show_MOD2()
                       : sc_aucl3)));
 }
 
+/**
+ * @brief Function shows the mode registers
+ * 
+ */
 void show_MOD3()
 {
   uint16_t value = 0;
@@ -475,6 +508,10 @@ void show_MOD3()
   Serial.println(valBool ? sc_spik0 :sc_spik1);
 }
 
+/**
+ * @brief Function shows the offset registers
+ * 
+ */
 void show_OFFSETS()
 {
   Serial.print("\nRegister:\tOFFX\tOffset: 0x");
@@ -496,6 +533,10 @@ void show_OFFSETS()
   Serial.println(sc_SYNCH);
 }
 
+/**
+ * @brief Function shows the interface registers
+ * 
+ */
 void show_IFAB()
 {
   uint16_t value = 0;
@@ -544,6 +585,10 @@ void show_IFAB()
   Serial.println(valBool ? sc_PushPull : sc_PushPull);
 }
 
+/**
+ * @brief Function shows the interface registers
+ * 
+ */
 void show_MOD4()
 {
   uint16_t value = 0;
@@ -608,6 +653,10 @@ void show_MOD4()
   Serial.println(Tle5012Sensor.reg.getInterfaceMode());
 }
 
+/**
+ * @brief Function shows the temperature registers
+ * 
+ */
 void show_TCOTY()
 {
   uint16_t value = 0;
@@ -630,6 +679,10 @@ void show_TCOTY()
   Serial.println(sc_CPAR);
 }
 
+/**
+ * @brief Function shows the ADC registers
+ * 
+ */
 void show_ADC()
 {
   Serial.print("\nRegister:\tADCX\tOffset: 0x");
@@ -670,7 +723,10 @@ void show_ADC()
 }
 
 
-
+/**
+ * @brief the main setup function
+ * 
+ */
 void setup() {
   delay(1000);
   Serial.begin(115200);
@@ -711,6 +767,10 @@ void setup() {
   Serial.end();
 }
 
+/**
+ * @brief Loop function is not used here
+ * 
+ */
 void loop() {
 }
 

@@ -10,7 +10,7 @@
  * This trigger must be in a 90 UT time frame at least 12 UT long for the first sensor. By
  * multiplying the 12 UT with the sensor slave number up to four sensors can be triggered.
  * This trigger setting UT the unittime must multiplied with the sensors base unittime which
- * is default 3.0µs. Setting the IFA pin to low and waiting atleast the total trigger time
+ * is default 3.0µs. Setting the IFA pin to low and waiting at least the total trigger time
  * will set all registers by the DSP.
  * For more information please read the SPC Interface section of the manual.
  * The default setup ist:

@@ -7,8 +7,8 @@
  * \details
  * This examples show how to use other SPI channels than the default one on the Arduino header.
  * This example is specially made for the XMC4700 Relax Kit which has five SPI channels.
- * From these five channels three can be used with overlapping other functionality.wrong 
- * THis example should also work for other MCUs with more than one SPI channel by setting the
+ * From these five channels three can be used with no overlapping of other functionality. 
+ * This example should also work for other MCUs with more than one SPI channel by setting the
  * right pin numbers.
  * It is also possible to combine this with the multi sensor example, as we can define up to
  * four independent sensors on each SPI channel.

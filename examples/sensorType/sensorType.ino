@@ -53,10 +53,10 @@ void setup() {
      during the runtime. A restart or with the resetFirmware function
      the changes will be set to the factory defaults.
   */
-  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.IIF);
-  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.PWM);
-  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.HSM);
-  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.SPC);
+  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.reg.IIF);
+  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.reg.PWM);
+  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.reg.HSM);
+  //checkError = Tle5012Sensor.writeInterfaceType(Tle5012Sensor.reg.SPC);
 
   /*
      Checkout the different auto calibration modes by removing the
@@ -64,10 +64,21 @@ void setup() {
      mode, a restart or resetFirmware will set everything back to
      factory defaults.
   */
-  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.noAutoCal);
-  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.mode1);
-  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.mode2);
-  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.mode3);
+  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.reg.noAutoCal);
+  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.reg.mode1);
+  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.reg.mode2);
+  //checkError = Tle5012Sensor.setCalibration(Tle5012Sensor.reg.mode3);
+
+  /*
+    You can enable/disable the prediction function. This functionality
+    is predefined on certain interfaces.
+    All the register fine tuning and reading can be done with the
+    functions from the tele5012b_reg module. See the Reg class for
+    further information.
+  */
+  //Tle5012Sensor.reg.enablePrediction();
+  //Tle5012Sensor.reg.disablePrediction();
+  //Tle5012Sensor.reg.setHSMplp(3);
 
   // read all registers
   checkError = Tle5012Sensor.readRegMap();

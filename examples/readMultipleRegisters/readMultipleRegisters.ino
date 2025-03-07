@@ -7,7 +7,7 @@
  * \details
  * This example demonstrates how to read multiple raw registers at once.
  * In this case you have to recalculate values like angle, angle speed etc.
- * be your self.
+ * by your self.
  *
  * \details
  * the read command offset of 0x8000 will be set by the readMoreRegisters command
