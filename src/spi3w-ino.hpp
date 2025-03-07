@@ -8,9 +8,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "Arduino.h"
+#ifndef SPI3W_INO_HPP
+#define SPI3W_INO_HPP
+
+
+#include <Arduino.h>
 #include "SPI.h"
-#include "Wire.h"
+#include "pal-pin-types.hpp"
 
 /**
  * @addtogroup arduinoPal
@@ -31,9 +35,6 @@ namespace tle5012
  *
  */
 
-#ifndef SPI3W_INO_HPP
-#define SPI3W_INO_HPP
-
 #define SPI3W_ARD        1
 #define SPI3W_XMC        2
 #define SPI3W_ESP32      3
@@ -41,18 +42,27 @@ namespace tle5012
 #define MAX_SLAVE_NUM    4              //!< Maximum numbers of slaves on one SPI bus
 #define SPEED            1000000U       //!< default speed of SPI transfer
 
-class SPIClass3W : public SPIClass
-{
+#if defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_UNOR4_WIFI)
+    // This part is yet to be implemented
+    class SPIClass3W : public ArduinoSPI {
+#elif defined(ARDUINO_ARCH_RP2040)
+    // This part is yet to be implemented
+    class SPIClass3W : public MbedSPI {
+#elif defined(ARDUINO_ARCH_SAMD)
+    // This part is yet to be implemented
+    class SPIClass3W : public SPIClassSAMD {
+#else
+    class SPIClass3W : public SPIClass {
+#endif
 
     public:
         #if defined(UC_FAMILY) && (UC_FAMILY == 1 || UC_FAMILY == 4)
             #define SPI3W_INO SPI3W_XMC
-        #elif defined(ESP32)
+        #elif defined(ESP32) && (ALTERNATIVE_PINS == 3)
             #define SPI3W_INO SPI3W_ESP32
         #else
             #define SPI3W_INO SPI3W_ARD
         #endif
-
 
         uint8_t     mCS;                //!< Pin for chip select
         uint8_t     mSpiNum;            //!< Number of used SPI channel
@@ -97,12 +107,12 @@ class SPIClass3W : public SPIClass
             void setupSPI();             //!< initial 3-Wire SPI setup
             void initSpi();              //!< initial startup of the 3-Wire SPI interface
 
-        #elif defined(ESP32)
+        #elif defined(ESP32) && (ALTERNATIVE_PINS == 3)
             void *e3Wire;                //!< we use a void pointer to avoid loading the ESP-IDF driver here
         #endif
 
-
 };
+
 
 /**
  * @brief define a new SPI3W macro for handling more than the default SPI channel
@@ -122,7 +132,8 @@ extern SPIClass3W SPI3W;
 #   endif
 #endif
 
-/** @} */
 }
+/** @} */
+
 
 #endif /* SPI3W_INO_HPP */

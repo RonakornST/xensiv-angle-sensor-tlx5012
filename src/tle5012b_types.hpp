@@ -13,7 +13,7 @@
 namespace tle5012
 {
     /**
-     * @addtogroup tle5012bCorelib
+     * @addtogroup tle5012btypes
      * @{
      */
 

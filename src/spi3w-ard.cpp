@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-
+#include <SPI.h>
 #include "spi3w-ino.hpp"
 #include "pal-pin-types.hpp"
 
@@ -23,25 +23,30 @@ using namespace tle5012;
  * @brief Arduino SPIClass extension to use 3wire SSC SPI interfaces
  */
 
-/**
+
+ /**
  * @brief Construct a new SPIClass3W::SPIClass3W object
  *
  */
-SPIClass3W::SPIClass3W(uint8_t spiNum):SPIClass()
-{
-    this->mCS = PIN_SPI_SS;
-    this->mMISO = PIN_SPI_MISO;
-    this->mMOSI = PIN_SPI_MOSI;
-    this->mSCK = PIN_SPI_SCK;
-    this->mSpiNum = spiNum;
-}
 
-/**
- * @brief Destroy the SPIClass3W::SPIClass3W object
- *
- */
-SPIClass3W::~SPIClass3W()
+#if defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_UNOR4_WIFI)
+// This part is yet to be implemented
+SPIClass3W::SPIClass3W(uint8_t spiNum):ArduinoSPI(MISO,MOSI,SCK,MODE_SPI)
+#elif defined(ARDUINO_ARCH_RP2040)
+// This part is yet to be implemented
+SPIClass3W::SPIClass3W(uint8_t spiNum):MbedSPI(MISO,MOSI,SCK)
+#elif defined(ARDUINO_ARCH_SAMD)
+// This part is yet to be implemented
+SPIClass3W::SPIClass3W(uint8_t spiNum):SPIClassSAMD(&PERIPH_SPI ,MISO,SCK,MOSI, PAD_SPI_TX,  PAD_SPI_RX)
+#else
+SPIClass3W::SPIClass3W(uint8_t spiNum):SPIClass()
+#endif
 {
+    this->mCS = SS;
+    this->mMISO = MISO;
+    this->mMOSI = MOSI;
+    this->mSCK = SCK;
+    this->mSpiNum = spiNum;
 }
 
 /*!
@@ -54,13 +59,33 @@ SPIClass3W::~SPIClass3W()
  */
 void SPIClass3W::begin(uint8_t miso, uint8_t mosi, uint8_t sck, uint8_t cs)
 {
-    setCSPin(cs);
     this->mMOSI = mosi;
     this->mMISO = miso;
     this->mSCK = sck;
+    setCSPin(cs);
     pinMode(this->mCS,OUTPUT);
     digitalWrite(this->mCS, HIGH);
-    SPIClass::begin();
+    #if defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_UNOR4_WIFI)
+        ArduinoSPI::begin();
+        Serial.println("Arduino Uno R4 3-wire SPI is yet not working");
+    #elif defined(ARDUINO_ARCH_RP2040)
+        MbedSPI::begin();
+        Serial.println("Arduino Uno Nano RP2040 3-wire SPI is yet not working");
+    #elif defined(ARDUINO_ARCH_SAMD)
+        SPIClassSAMD::begin();
+        Serial.println("Arduino SAMD 3-wire SPI is yet not working");
+    #else
+        SPIClass::begin();
+    #endif
+}
+
+
+/**
+ * @brief Destroy the SPIClass3W::SPIClass3W object
+ *
+ */
+SPIClass3W::~SPIClass3W()
+{
 }
 
 /*!
@@ -95,8 +120,11 @@ void SPIClass3W::sendReceiveSpi(uint16_t* sent_data, uint16_t size_of_sent_data,
     {
         received_data[0] = transfer16(sent_data[data_index]);
     }
+    // Some MCUs require a delay and CS high to low between the last byte and the CS high
+    // digitalWrite(this->mCS, HIGH);
 
     // receive via RX
+    // digitalWrite(this->mCS, LOW);
     pinMode(this->mMISO,OUTPUT);
     pinMode(this->mMOSI,INPUT);
     delayMicroseconds(5);
@@ -109,6 +137,10 @@ void SPIClass3W::sendReceiveSpi(uint16_t* sent_data, uint16_t size_of_sent_data,
     endTransaction();
     digitalWrite(this->mCS, HIGH);
 }
+
+
+// #endif
+
 
 /** @} */
 

@@ -10,6 +10,7 @@
 
 
 #include "spi3w-ino.hpp"
+#include "Wire.h"
 
 #if (SPI3W_INO == SPI3W_XMC)
 
@@ -29,10 +30,10 @@ using namespace tle5012;
  */
 SPIClass3W::SPIClass3W(uint8_t spiNum):SPIClass()
 {
-    this->mCS = PIN_SPI_SS;
-    this->mMISO = PIN_SPI_MISO;
-    this->mMOSI = PIN_SPI_MOSI;
-    this->mSCK = PIN_SPI_SCK;
+    this->mCS = SS;
+    this->mMISO = MISO;
+    this->mMOSI = MOSI;
+    this->mSCK = SCK;
     this->mSpiNum = spiNum;
 }
 
@@ -106,6 +107,15 @@ void SPIClass3W::setupSPI()
         m3Wire.mosi_open.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT7;
         m3Wire.mosi_open.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD;
         m3Wire.sck_config.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT7;
+        m3Wire.sck_config.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD;
+    #elif defined(XMC1400_XMC2GO)
+        m3Wire.channel = XMC_SPI1_CH1;
+        m3Wire.input_source = XMC_INPUT_A;
+        m3Wire.miso_open.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD;
+        m3Wire.miso_close.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD;
+        m3Wire.mosi_open.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT9;
+        m3Wire.mosi_open.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD;
+        m3Wire.sck_config.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT8;
         m3Wire.sck_config.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD;
     #elif defined(XMC1100_Boot_Kit) || defined(XMC1300_Boot_Kit) || defined(XMC1400_Boot_Kit)
         m3Wire.channel = XMC_SPI0_CH0;

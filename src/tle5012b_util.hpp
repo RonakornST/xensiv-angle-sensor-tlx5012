@@ -1,4 +1,4 @@
-/*!
+/**
  * \file        tle5012b_util.hpp
  * \name        tle5012b_util.hpp - core support header for the TLE5012B angle sensor.
  * \author      Infineon Technologies AG
@@ -11,7 +11,6 @@
  *              the type of secondary interface (PWM, IIF or HSM) the meaning of some register values
  *              differs, so please have look in the TLE5012 manual for the exact meaning.
  *              Also included here are other senseful macros for handling the TLE5012 sensor.
- * \ref         tle5012corelib
  *
  * SPDX-License-Identifier: MIT
  *

@@ -33,10 +33,10 @@ namespace tle5012
     {
         private:
 
-            uint8_t       csPin   = PIN_SPI_SS;          //<! \brief chip select pin for the device
-            uint8_t       misoPin = PIN_SPI_MISO;        //<! \brief SPI miso pin
-            uint8_t       mosiPin = PIN_SPI_MOSI;        //<! \brief SPI mosi pin
-            uint8_t       sckPin  = PIN_SPI_SCK;         //<! \brief SPI system clock pin
+            uint8_t       csPin   = SS;                  //<! \brief chip select pin for the device
+            uint8_t       misoPin = MISO;                //<! \brief SPI miso pin
+            uint8_t       mosiPin = MOSI;                //<! \brief SPI mosi pin
+            uint8_t       sckPin  = SCK;                 //<! \brief SPI system clock pin
             SPIClass3W    *spi    = NULL;                //<! \brief extended SPI class pointer
 
         public:

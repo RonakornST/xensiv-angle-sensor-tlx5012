@@ -1,9 +1,8 @@
-/*!
+/**
  * \file        tlx5012-arduino.hpp
  * \name        tlx5012-arduino.hpp - Arduino library for the Infineon TLx5012 magnetic angular sensor
  * \author      Infineon Technologies AG
  * \copyright   2020-2024 Infineon Technologies AG
- * \ref         tle5012ino
  * \version     4.0.0
  * \brief       This is a Arduino platform file use Infineon's TLE5012B magnetic angular sensor
  *

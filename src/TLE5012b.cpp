@@ -1,11 +1,10 @@
-/*!
+/**
  * \file        TLE5012b.cpp
  * \name        TLE5012b.cpp - core library for the TLx5012B angle sensor family.
  * \author      Infineon Technologies AG
  * \copyright   2019-2024 Infineon Technologies AG
  * \version     4.0.0
  * \brief       GMR-based angle sensor for angular position sensing in automotive applications
- * \ref         tle5012corelib
  *
  * SPDX-License-Identifier: MIT
  *

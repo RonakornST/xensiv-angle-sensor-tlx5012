@@ -4,7 +4,14 @@
  * \author      Infineon Technologies AG
  * \version     4.0.0
  * \copyright   2020-2024 Infineon Technologies AG
- *
+ * 
+ * \attention   This code is normally not needed for ESP32 its clones.
+ * Under certain circumstances it might be usefull as this code uses the third
+ * SPI channel under VSPI. It only works on ESP32s up to the C2 version, but not 
+ * for S2/S3 and higher.
+ * Before you use this code, try to set the correct SPI pin settings in pal-types-pin.hpp
+ * and the 1kOhm resistor between MISO and MOSI (see documentation) to get it running.
+ * 
  * SPDX-License-Identifier: MIT
  */
 
@@ -70,10 +77,10 @@ uint16_t tle5012b_spi_send_and_recv_uint16(spi_device_handle_t spi, uint16_t sen
  */
 SPIClass3W::SPIClass3W(uint8_t spiNum):SPIClass()
 {
-    this->mCS = PIN_SPI_SS;
-    this->mMISO = PIN_SPI_MISO;
-    this->mMOSI = PIN_SPI_MOSI;
-    this->mSCK = PIN_SPI_SCK;
+    this->mCS = SS;
+    this->mMISO = MISO;
+    this->mMOSI = MOSI;
+    this->mSCK = SCK;
     this->mSpiNum = spiNum;
     spi_device_handle_t esp3Wire = NULL; // Some C structure and
     this->e3Wire = &esp3Wire;            // void pointer magic
@@ -113,7 +120,7 @@ void SPIClass3W::begin(uint8_t miso, uint8_t mosi, uint8_t sck, uint8_t cs)
     bus_config.miso_io_num = this->mMISO;                           // no MISO setting for 3Wire but we use 4Wire
     bus_config.quadwp_io_num = -1;                                  // Not used
     bus_config.quadhd_io_num = -1;                                  // Not used
-    intError = spi_bus_initialize(VSPI_HOST, &bus_config, false);   // use the VSPI of the ESP32 which is SPI3
+    intError = spi_bus_initialize(SPI3_HOST, &bus_config, false);   // use the VSPI of the ESP32 which is SPI3
 
     // add device for the ESP-IDF driver
     spi_device_interface_config_t dev_config = {}; // initializes all field to 0
@@ -127,7 +134,7 @@ void SPIClass3W::begin(uint8_t miso, uint8_t mosi, uint8_t sck, uint8_t cs)
     dev_config.queue_size = 7;
     dev_config.pre_cb = NULL;
     dev_config.post_cb = NULL;
-    intError = spi_bus_add_device(VSPI_HOST, &dev_config, &(*(spi_device_handle_t*)this->e3Wire));
+    intError = spi_bus_add_device(SPI3_HOST, &dev_config, &(*(spi_device_handle_t*)this->e3Wire));
     ESP_ERROR_CHECK(intError);
 
     gpio_set_direction((gpio_num_t)this->mMOSI, GPIO_MODE_INPUT_OUTPUT_OD); // set the MOSI for INPUT and OUTPUT

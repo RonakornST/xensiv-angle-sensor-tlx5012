@@ -1,4 +1,4 @@
-/*!
+/**
  * \file        tle5012b_reg.hpp
  * \name        tle5012b_reg.hpp - core register support header for the TLx5012B angle sensor family.
  * \author      Infineon Technologies AG
@@ -11,7 +11,6 @@
  *              the type of secondary interface (PWM, IIF or HSM) the meaning of some register values
  *              differs, so please have look in the TLE5012 manual for the exact meaning.
  *              Also included here are other senseful macros for handling the TLE5012 sensor.
- * \ref         tle5012corelib
  *
  * SPDX-License-Identifier: MIT
  *
@@ -29,6 +28,9 @@ namespace tle5012
 {
 
 /**
+ * @brief Register class for the TLE5012B sensor
+ *
+ ' @class Reg
  * @addtogroup tle5012reg
  *
  * @{
@@ -88,13 +90,13 @@ class Reg
          */
         enum Access_t
         {
-            REG_ACCESS_R    = (0x01U),      //!< \brief Read access register */
-            REG_ACCESS_W    = (0x02U),      //!< \brief Write access register */
-            REG_ACCESS_RW   = (0x03U),      //!< \brief Read & write access register */
-            REG_ACCESS_U    = (0x04U),      //!< \brief Update register */
-            REG_ACCESS_RU   = (0x05U),      //!< \brief Read & update register */
-            REG_ACCESS_RWU  = (0x07U),      //!< \brief Read & write & update register */
-            REG_ACCESS_RES  = (0x10U)       //!< \brief Reserved access register */
+            REG_ACCESS_R    = (0x01U),      //!< \brief Read access register
+            REG_ACCESS_W    = (0x02U),      //!< \brief Write access register
+            REG_ACCESS_RW   = (0x03U),      //!< \brief Read & write access register
+            REG_ACCESS_U    = (0x04U),      //!< \brief Update register
+            REG_ACCESS_RU   = (0x05U),      //!< \brief Read & update register
+            REG_ACCESS_RWU  = (0x07U),      //!< \brief Read & write & update register
+            REG_ACCESS_RES  = (0x10U)       //!< \brief Reserved access register
         };
 
         /**
@@ -102,12 +104,12 @@ class Reg
          */
         typedef struct
         {
-            uint8_t  regAccess;              //!< \brief Bitfield register access */
-            uint16_t regAddress;             //!< \brief Bitfield register address */
-            uint16_t mask;                   //!< \brief Bitfield mask */
-            uint8_t  position;               //!< \brief Bitfield position */
-            uint8_t  resetValue;             //!< \brief Bitfield register reset value */
-            uint8_t  posMap;                 //!< \brief Bitfield position of register in regMap */
+            uint8_t  regAccess;              //!< \brief Bitfield register access
+            uint16_t regAddress;             //!< \brief Bitfield register address
+            uint16_t mask;                   //!< \brief Bitfield mask
+            uint8_t  position;               //!< \brief Bitfield position
+            uint8_t  resetValue;             //!< \brief Bitfield register reset value
+            uint8_t  posMap;                 //!< \brief Bitfield position of register in regMap
         }BitField_t;
 
         /**

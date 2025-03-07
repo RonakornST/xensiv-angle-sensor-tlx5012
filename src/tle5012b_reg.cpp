@@ -1,6 +1,6 @@
-/*!
+/**
  * \file        tle5012b_reg.cpp
- * \name        tle5012b_reg.cpp - core support for the TLEx012B angle sensor family.
+ * \name        tle5012b_reg.cpp - core register support header for the TLx5012B angle sensor family.
  * \author      Infineon Technologies AG
  * \copyright   2019-2024 Infineon Technologies AG
  * \version     4.0.0
@@ -11,12 +11,10 @@
  *              the type of secondary interface (PWM, IIF or HSM) the meaning of some register values
  *              differs, so please have look in the TLE5012 manual for the exact meaning.
  *              Also included here are other senseful macros for handling the TLE5012 sensor.
- * \ref         tle5012corelib
  *
  * SPDX-License-Identifier: MIT
  *
  */
-
 #include "TLE5012b.hpp"
 #include "tle5012b_reg.hpp"
 
@@ -136,8 +134,8 @@ const Reg::BitField_t Reg::bitFields[] =
     {REG_ACCESS_RW,  REG_MOD_4,   0x3,    0,  0x00, 14},       //!< 69 bits 1:0 IFMD Interface Mode on IFA,IFB,IFC
     {REG_ACCESS_RES, REG_MOD_4,   0x4,    2,  0x00, 14},       //!< 70 bits 2:2 Reserved1
     {REG_ACCESS_RW,  REG_MOD_4,   0x18,   3,  0x00, 14},       //!< 71 bits 4:3 IFABRES IIF resolution (multi-purpose)
-    {REG_ACCESS_RW,  REG_MOD_4,   0x1E0,  5,  0x00, 14},       //!< 72 bits 8:5 HSMPLP Hall Switch mode (multi-purpose)
-    {REG_ACCESS_RW,  REG_MOD_4,   0x7E00, 9,  0x00, 14},       //!< 73 bits 15:9 TCOXT 7-bit signed integer value of X-offset temperature coefficient
+    {REG_ACCESS_RW,  REG_MOD_4,   0x1E0,  5,  0x00, 14},       //!< 72 bits 8:5 HSMPLP Hall Switch mode (multi-purpose) #1E0
+    {REG_ACCESS_RW,  REG_MOD_4,   0x7E00, 9,  0x00, 14},       //!< 73 bits 15:9 TCOXT 7-bit signed integer value of X-offset temperature coefficient #7E00
 
     {REG_ACCESS_RW,  REG_TCO_Y,   0x7F,   0,  0x00, 15},       //!< 74 bits 7:0 CRCPAR CRC of Parameters
     {REG_ACCESS_RW,  REG_TCO_Y,   0x80,   8,  0x00, 15},       //!< 75 bits 8:8 SBIST Startup-BIST
@@ -207,6 +205,7 @@ bool Reg::getBitField(BitField_t bitField, uint16_t &bitFValue)
 
 /**
  * @brief       Sets the bit field value
+ * First read the content of the register, than change the selected bits, than write back the register value
  *
  * @param[in]   bitField        Bit field parameters structure
  * @param[in]   bitFNewValue    Value of the bit field
@@ -221,6 +220,7 @@ bool Reg::setBitField(BitField_t bitField, uint16_t bitFNewValue)
     if ((REG_ACCESS_W & bitField.regAccess) == REG_ACCESS_W)
     {
         Tle5012b *p = static_cast<Tle5012b*>(parent_);
+        p->readFromSensor(addrFields[bitField.posMap].regAddress, regMap[bitField.posMap], UPD_low, SAFE_high);
         regMap[bitField.posMap] = (regMap[bitField.posMap] & ~bitField.mask) | ((bitFNewValue << bitField.position) & bitField.mask);
         p->writeToSensor(addrFields[bitField.posMap].regAddress, regMap[bitField.posMap], true);
         err = true;
@@ -1522,17 +1522,17 @@ void Reg::setIFABres(uint8_t res)
 /**
  * @brief Get multipurpose register
  *
- * @return uint8_t multipurpose, PWM frequency, IIF resolution, SPC frame configuration
+ * @return uint8_t multipurpose, HSM pole pairs, PWM frequency, IIF resolution, SPC frame configuration
  */
 uint8_t Reg::getIFABres(void)
 {
     uint16_t bitf = 0x00;
-    getBitField(bitFields[REG_MOD_4_HSMPLP], bitf);
+    getBitField(bitFields[REG_MOD_4_IFABRES], bitf);
     return bitf;
 }
 
 /**
- * @brief Set multipurpose register,
+ * @brief Set multipurpose register,  HSM pole pairs, PWM frequency, IIF resolution, SPC frame configuration
  *
  */
 void Reg::setHSMplp(uint8_t plp)
@@ -1548,7 +1548,7 @@ void Reg::setHSMplp(uint8_t plp)
 uint8_t Reg::getHSMplp(void)
 {
     uint16_t bitf = 0x00;
-    getBitField(bitFields[REG_MOD_4_IFABRES], bitf);
+    getBitField(bitFields[REG_MOD_4_HSMPLP], bitf);
     return bitf;
 }
 
